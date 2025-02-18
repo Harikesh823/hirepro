@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Hiring Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 300px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Worker Hiring Form</h2>
+    <form id="hiringForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="mobile">Mobile</label>
+        <input type="text" id="mobile" name="mobile" required>
+        
+        <label for="whatsapp">Whatsapp</label>
+        <input type="text" id="whatsapp" name="whatsapp" required>
+        
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" required>
+        
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+            <option value="Plumber">Plumber</option>
+            <option value="Carpenter">Carpenter</option>
+            <option value="Painter">Painter</option>
+            <option value="Labour">Labour</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Mason">Mason</option>
+            <option value="Gardener">Gardener</option>
+            <option value="Cook">Cook</option>
+            <option value="Driver">Driver</option>
+        </select>
+        
+        <label for="subcategory">Subcategory (if applicable)</label>
+        <select id="subcategory" name="subcategory">
+            <!-- Subcategories will be populated based on the selected category -->
+        </select>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        emailjs.init("L9JYKhiEZyI4tE4lL");
+
+        // Function to populate subcategories based on selected category
+        document.getElementById('category').addEventListener('change', function() {
+            var category = this.value;
+            var subcategorySelect = document.getElementById('subcategory');
+            var subcategories = {
+                "Plumber": ["Pipe Repair", "Tap Fitting", "New Installation", "Leak Fixing"],
+                "Carpenter": ["Furniture Repair", "Door Installation", "Wooden Work", "Flooring"],
+                "Painter": ["Interior Painting", "Exterior Painting", "Wall Design", "Polishing"],
+                "Labour": ["Heavy Lifting", "Shifting", "Cleaning", "Packing"],
+                "Electrician": ["Fan Setup", "Wiring", "Switch Setup", "Repairing"],
+                "Mason": ["Brick Work", "Plastering", "Concrete", "Stone Work"],
+                "Gardener": ["Lawn Care", "Planting", "Tree Cutting", "Garden Maintenance"],
+                "Cook": ["Chef Services", "Catering", "Home Cooking"],
+                "Driver": ["Personal Driver", "Delivery Driver", "Cab Services"]
+            };
+
+            // Clear the previous options
+            subcategorySelect.innerHTML = "";
+            
+            // Populate subcategories based on selected category
+            var options = subcategories[category] || [];
+            options.forEach(function(subcategory) {
+                var option = document.createElement("option");
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        });
+
+        document.getElementById("hiringForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var name = document.getElementById("name").value;
+            var mobile = document.getElementById("mobile").value;
+            var whatsapp = document.getElementById("whatsapp").value;
+            var address = document.getElementById("address").value;
+            var category = document.getElementById("category").value;
+            var subcategory = document.getElementById("subcategory").value;
+
+            emailjs.send("service_gvarsid", "template_qu419lf", {
+                name: name,
+                mobile: mobile,
+                whatsapp: whatsapp,
+                address: address,
+                category: category,
+                subcategory: subcategory
+            }).then(function(response) {
+                alert("Form submitted successfully!");
+            }, function(error) {
+                alert("Failed to send form. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>
